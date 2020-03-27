@@ -12,7 +12,9 @@ import LabAssignAssessMV.validation.NotaValidator;
 import LabAssignAssessMV.validation.StudentValidator;
 import LabAssignAssessMV.validation.TemaValidator;
 import LabAssignAssessMV.validation.ValidationException;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Random;
 
@@ -30,6 +32,9 @@ public class AppTest
     TemaXMLRepo temaXMLRepository = new TemaXMLRepo(filenameTema);
     NotaValidator notaValidator = new NotaValidator(studentXMLRepository, temaXMLRepository);
     NotaXMLRepo notaXMLRepository = new NotaXMLRepo(filenameNota);
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void tc_1_NewStudent() {
@@ -83,5 +88,23 @@ public class AppTest
 
 
         assertEquals(result, null);
+    }
+
+    @Test
+    public void tc_3_NewStudent_NullEmail() {
+
+        Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+
+        int newID = new Random().nextInt(100000) + 30;
+        Student student3 = new Student(newID + "","Deaconu Andrei", 932, null);
+
+        Iterable<Student> students = service.getAllStudenti();
+        try {
+            service.addStudent(student3);
+        }
+        catch (ValidationException e) {
+            final String msg = "Email incorect!";
+            assertEquals(msg, e.getMessage());
+        }
     }
 }
