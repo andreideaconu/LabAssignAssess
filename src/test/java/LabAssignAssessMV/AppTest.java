@@ -11,6 +11,7 @@ import LabAssignAssessMV.service.Service;
 import LabAssignAssessMV.validation.NotaValidator;
 import LabAssignAssessMV.validation.StudentValidator;
 import LabAssignAssessMV.validation.TemaValidator;
+import LabAssignAssessMV.validation.ValidationException;
 import org.junit.Test;
 
 import java.util.Random;
@@ -34,48 +35,53 @@ public class AppTest
     public void tc_1_NewStudent() {
 
         Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-
         int newID = new Random().nextInt(100000) + 30;
         Student student1 = new Student(newID + "","Deaconu Andrei", new Random().nextInt(6) + 931, "daie2301@scs.ubbcluj.ro");
+        Student result1 = service.addStudent(student1);
 
-        Iterable<Student> students = service.getAllStudenti();
-        int noStudentsBefore = 0;
-        for (Object i : students) {
-            noStudentsBefore++;
-        }
-
-        service.addStudent(student1);
-        students = service.getAllStudenti();
-
-        int noStudents = 0;
-        for (Object i : students) {
-            noStudents++;
-        }
-
-        assertEquals(noStudentsBefore + 1, noStudents);
+        assertEquals(result1, student1);
     }
 
-    @Test
+    @Test(expected = ValidationException.class)
     public void tc_2_NewStudent_ExistentID() {
 
         Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
 
         Student student2 = new Student("7","Deaconu Andrei", 932, "daie2301@scs.ubbcluj.ro");
 
-        Iterable<Student> students = service.getAllStudenti();
-        int noStudentsBefore = 0;
-        for (Object i : students) {
-            noStudentsBefore++;
-        }
+        Student result2 = service.addStudent(student2);
 
-        service.addStudent(student2);
-        students = service.getAllStudenti();
+        assertEquals(result2, null);
+    }
 
-        int noStudents = 0;
-        for (Object i : students) {
-            noStudents++;
-        }
+    @Test(expected = ValidationException.class)
+    public void tc_5_NewStudent_NegativeGroup() {
 
-        assertEquals(noStudentsBefore, noStudents);
+        Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+
+        int newID = new Random().nextInt(100000) + 30;
+        Student student5 = new Student(newID + "", "Deaconu Andrei", -1, "daie2301@scs.ubbcluj.ro");
+
+        Student result = service.addStudent(student5);
+
+
+
+        assertEquals(result, null);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void tc_6_NewStudent_EmptyName() {
+
+        Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+
+        int newID = new Random().nextInt(100000) + 30;
+        Student student6 = new Student(newID + "", "", 932, "daie2301@scs.ubbcluj.ro");
+
+
+        Student result = service.addStudent(student6);
+
+
+
+        assertEquals(result, null);
     }
 }
