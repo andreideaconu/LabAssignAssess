@@ -59,37 +59,6 @@ public class AppTest
         assertEquals(result2, null);
     }
 
-    @Test(expected = ValidationException.class)
-    public void tc_5_NewStudent_NegativeGroup() {
-
-        Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-
-        int newID = new Random().nextInt(100000) + 30;
-        Student student5 = new Student(newID + "", "Deaconu Andrei", -1, "daie2301@scs.ubbcluj.ro");
-
-        Student result = service.addStudent(student5);
-
-
-
-        assertEquals(result, null);
-    }
-
-    @Test(expected = ValidationException.class)
-    public void tc_6_NewStudent_EmptyName() {
-
-        Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-
-        int newID = new Random().nextInt(100000) + 30;
-        Student student6 = new Student(newID + "", "", 932, "daie2301@scs.ubbcluj.ro");
-
-
-        Student result = service.addStudent(student6);
-
-
-
-        assertEquals(result, null);
-    }
-
     @Test
     public void tc_3_NewStudent_NullEmail() {
 
@@ -107,4 +76,87 @@ public class AppTest
             assertEquals(msg, e.getMessage());
         }
     }
+
+    @Test
+    public void tc_4_NewStudent_EmptyEmail() {
+
+        Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+
+        int newID = new Random().nextInt(100000) + 30;
+        Student student4 = new Student(newID + "","Deaconu Andrei", 932, "");
+
+        Iterable<Student> students = service.getAllStudenti();
+        try {
+            service.addStudent(student4);
+        }
+        catch (ValidationException e) {
+            final String msg = "Email incorect!";
+            assertEquals(msg, e.getMessage());
+        }
+    }
+    @Test
+    public void tc_5_NewStudent_NegativeGroup() {
+
+        Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+
+        int newID = new Random().nextInt(100000) + 30;
+        Student student5 = new Student(newID + "", "Deaconu Andrei", -1, "daie2301@scs.ubbcluj.ro");
+
+
+        try {
+            service.addStudent(student5);
+        }
+        catch (ValidationException e) {
+            final String msg = "Grupa incorecta!";
+            assertEquals(msg, e.getMessage());
+        }
+    }
+
+    @Test
+    public void tc_6_NewStudent_NullName() {
+
+        Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+
+        int newID = new Random().nextInt(100000) + 30;
+        Student student6 = new Student(newID + "", null, 932, "daie2301@scs.ubbcluj.ro");
+
+        try {
+            service.addStudent(student6);
+        }
+        catch (ValidationException e) {
+            final String msg = "Nume incorect!";
+            assertEquals(msg, e.getMessage());
+        }
+    }
+
+    @Test
+    public void tc_7_NewStudent_EmptyName() {
+
+        Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+
+        int newID = new Random().nextInt(100000) + 30;
+        Student student7 = new Student(newID + "", "", 932, "daie2301@scs.ubbcluj.ro");
+
+        try {
+            service.addStudent(student7);
+        }
+        catch (ValidationException e) {
+            final String msg = "Nume incorect!";
+            assertEquals(msg, e.getMessage());
+        }
+    }
+
+    @Test
+    public void tc_8_NewStudent_BVA() {
+
+        Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+
+        int newID = new Random().nextInt(100000) + 30;
+        Student student8 = new Student(newID + "", "1", 0, "1");
+
+        Student result8= service.addStudent(student8);
+
+        assertEquals(result8, student8);
+    }
+
 }
