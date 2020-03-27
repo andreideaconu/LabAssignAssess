@@ -47,7 +47,7 @@ public class AppTest
         assertEquals(result1, student1);
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void tc_2_NewStudent_ExistentID() {
 
         Service service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
