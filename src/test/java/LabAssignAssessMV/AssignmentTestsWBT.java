@@ -22,8 +22,7 @@ import static org.junit.Assert.*;
 /**
  * Unit test for simple App.
  */
-public class AssignmentTestsWBT
-{
+public class AssignmentTestsWBT {
     StudentValidator studentValidator = new StudentValidator();
     TemaValidator temaValidator = new TemaValidator();
     String filenameStudent = "fisiere/Studenti.xml";
@@ -44,7 +43,7 @@ public class AssignmentTestsWBT
     @Test
     public void tc_1_AddAssignment() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment1 = new Tema(newID + "","testAssignment", 13, 7);
+        Tema assignment1 = new Tema(newID + "", "testAssignment", 13, 7);
 
         assertNull(temaXMLRepository.findOne(newID + ""));
 
@@ -57,100 +56,115 @@ public class AssignmentTestsWBT
     @Test(expected = ValidationException.class)
     public void tc_2_AddAssignment_EmptyNumber() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment2 = new Tema("","testAssignment", 13, 7);
+        Tema assignment2 = new Tema("", "testAssignment", 13, 7);
 
         service.addTema(assignment2);
     }
 
     @Test(expected = ValidationException.class)
-    public void tc_3_AddAssignment_EmptyDescription() {
+    public void tc_3_AddAssignment_NullNumber() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment3 = new Tema(newID + "","", 13, 7);
+        Tema assignment3 = new Tema(null, "testAssignment", 13, 7);
 
         service.addTema(assignment3);
     }
 
     @Test(expected = ValidationException.class)
-    public void tc_4_AddAssignment_TooSmallDeadline() {
+    public void tc_4_AddAssignment_EmptyDescription() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment4 = new Tema(newID + "","testAssignment", 0, 7);
+        Tema assignment4 = new Tema(newID + "", "", 13, 7);
 
         service.addTema(assignment4);
     }
 
     @Test(expected = ValidationException.class)
-    public void tc_5_AddAssignment_TooBigDeadline() {
+    public void tc_5_AddAssignment_NullDescription() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment5 = new Tema(newID + "","testAssignment", 15, 7);
+        Tema assignment5 = new Tema(newID + "", null, 13, 7);
 
         service.addTema(assignment5);
     }
 
     @Test(expected = ValidationException.class)
-    public void tc_6_AddAssignment_DeadlineBeforeReceived() {
+    public void tc_6_AddAssignment_TooSmallDeadline() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment6 = new Tema(newID + "","testAssignment", 5, 7);
+        Tema assignment6 = new Tema(newID + "", "testAssignment", 0, 7);
 
         service.addTema(assignment6);
     }
 
     @Test(expected = ValidationException.class)
-    public void tc_7_AddAssignment_TooSmallReceived() {
+    public void tc_7_AddAssignment_TooBigDeadline() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment7 = new Tema(newID + "","testAssignment", 5, 0);
+        Tema assignment7 = new Tema(newID + "", "testAssignment", 15, 7);
 
         service.addTema(assignment7);
     }
 
     @Test(expected = ValidationException.class)
-    public void tc_8_AddAssignment_TooBigReceived() {
+    public void tc_8_AddAssignment_DeadlineBeforeReceived() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment8 = new Tema(newID + "","testAssignment", 5, 15);
+        Tema assignment8 = new Tema(newID + "", "testAssignment", 5, 7);
 
         service.addTema(assignment8);
     }
 
     @Test(expected = ValidationException.class)
-    public void tc_9_AddAssignment_WrongIDAndReceived() {
+    public void tc_9_AddAssignment_TooSmallReceived() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment9 = new Tema("","testAssignment", 5, 15);
+        Tema assignment9 = new Tema(newID + "", "testAssignment", 5, 0);
 
         service.addTema(assignment9);
     }
 
     @Test(expected = ValidationException.class)
-    public void tc_10_AddAssignment_WrongIDAndDeadline() {
+    public void tc_10_AddAssignment_TooBigReceived() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment10 = new Tema("","testAssignment", 15, 5);
+        Tema assignment10 = new Tema(newID + "", "testAssignment", 5, 15);
 
         service.addTema(assignment10);
     }
 
     @Test(expected = ValidationException.class)
-    public void tc_11_AddAssignment_WrongReceivedAndDeadline() {
+    public void tc_11_AddAssignment_WrongIDAndReceived() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment11 = new Tema(newID + "","testAssignment", 0, 0);
+        Tema assignment11 = new Tema("", "testAssignment", 5, 15);
 
         service.addTema(assignment11);
     }
 
     @Test(expected = ValidationException.class)
-    public void tc_12_AddAssignment_WrongData() {
+    public void tc_12_AddAssignment_WrongIDAndDeadline() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
-        Tema assignment12 = new Tema("","", 15, 0);
+        Tema assignment12 = new Tema("", "testAssignment", 15, 5);
 
         service.addTema(assignment12);
     }
 
-    @Test
-    public void tc_13_AddAssignment_ExistentID() {
+    @Test(expected = ValidationException.class)
+    public void tc_13_AddAssignment_WrongReceivedAndDeadline() {
         service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+        Tema assignment13 = new Tema(newID + "", "testAssignment", 0, 0);
 
-        Tema assignment13 = new Tema(7 + "","test", 10, 6);
-
-        Tema result = service.addTema(assignment13);
-
-        assertNotEquals(result, null);
+        service.addTema(assignment13);
     }
 
+    @Test(expected = ValidationException.class)
+    public void tc_14_AddAssignment_WrongData() {
+        service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+        Tema assignment14 = new Tema("", "", 15, 0);
+
+        service.addTema(assignment14);
+    }
+
+    @Test
+    public void tc_15_AddAssignment_ExistentID() {
+        service = new Service(studentXMLRepository, studentValidator, temaXMLRepository, temaValidator, notaXMLRepository, notaValidator);
+
+        Tema assignment15 = new Tema(7 + "", "test", 10, 6);
+
+        Tema result = service.addTema(assignment15);
+
+        assertNotSame(result, null);
+    }
 }
