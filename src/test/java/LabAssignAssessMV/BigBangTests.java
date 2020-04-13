@@ -86,7 +86,7 @@ public class BigBangTests {
     }
 
     @Test
-    public void tc_4_BigBang() {
+    public void tc_4_IntegrationTesting() {
         tc_1_AddStudent();
         tc_2_AddAssignment();
         tc_3_AddGrade();
